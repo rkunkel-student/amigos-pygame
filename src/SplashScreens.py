@@ -11,9 +11,11 @@ class SplashScreens:
         self.show_timer = 1200
 
     def update(self):
+        self.draw()
         if pg.time.get_ticks() - self.start_time > self.show_timer:
             pg.event.post(LOAD_START_SCENE)
+        
 
-
-    def draw(self, screen):
+    def draw(self):
+        screen = pg.display.get_surface()
         screen.blit(self.image, self.rect)

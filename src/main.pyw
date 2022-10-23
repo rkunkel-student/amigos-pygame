@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 #! /usr/bin/python3
 # (C) RKADE GAMES, LLC. Freedom to distribute.
-"""PyGame Halloween Contest 2022-10"""
+"""PyGame Halloween Contest 2022-10-22"""
 
 import logging
 from sys import stdout, exit
 import pygame as pg
-from utils.settings import SCREEN_SIZE, FPS
-from screens.SplashScreens import SplashScreens
+from utils.settings import SCREEN_SIZE, FPS, SCREEN_WIDTH, SCREEN_HEIGHT
+from SplashScreens import SplashScreens
+from StartMenu import StartMenu
+from Level import Level
 
 # ---------------------------------------- LOGGING ---------------------------------------- # 
 
@@ -35,21 +37,6 @@ pg.init()
 # ---------------------------------------- END PyGame Init ---------------------------------------- #
 
 
-class StartMenu:
-    def __init__(self):
-        self.font = pg.font.Font(pg.font.get_default_font(), 32)
-        self.title_surface = self.font.render("Start Scene", True, "white")
-
-    def update(self):
-        pass
-
-    def draw(self, screen: pg.surface.Surface):
-        rect = screen.get_rect()
-        offset = pg.math.Vector2(0, 50)
-        title_rect = self.title_surface.get_rect(midtop=rect.midtop + offset)
-        screen.blit(self.title_surface, title_rect)
-
-
 class Game:
     def __init__(self):
         self.screen = pg.display.set_mode(SCREEN_SIZE)
@@ -60,25 +47,16 @@ class Game:
 
         self.level = SplashScreens()
 
-
     def handle_user_events(self, event):
         if event.name == "start scene":
             self.level = StartMenu()
-
-
-    def handle_keydown_events(self, event):
-        lh.info(event)
-
-
-
-    def handle_keyup_events(self, event):
-        lh.info(event)
-  
+        elif event.name == "level 1":
+            self.level = Level()
 
     def run(self):
         while True:
-            
-            for event in pg.event.get():
+            events = pg.event.get()
+            for event in events:
                 if event.type == pg.QUIT:
                     pg.quit()
                     exit()
@@ -87,27 +65,8 @@ class Game:
                 elif event.type == pg.USEREVENT:
                     self.handle_user_events(event)
 
-                elif event.type == pg.KEYDOWN:
-                    self.handle_keydown_events(event)
-
-                elif event.type == pg.KEYUP:
-                    self.handle_keyup_events(event)
-
-                # elif event.type == pg.MOUSEBUTTONDOWN:
-                #     pass
-                # elif event.type == pg.MOUSEBUTTONUP:
-                #     pass
-                # elif event.type == pg.MOUSEMOTION:
-                #     pass
-                # elif event.type == pg.MOUSEWHEEL:
-                #     pass
-
-
             # wipe the screen before drawing
             self.screen.fill('black')
-
-            # draw 
-            self.level.draw(self.screen)
 
             # update 
             self.level.update()
